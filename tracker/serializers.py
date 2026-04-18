@@ -5,7 +5,7 @@ from .models import Portfolio, Watchlist
 class PortfolioSerializer(serializers.ModelSerializer):
     class Meta:
         model = Portfolio
-        fields = ['stock_symbol', 'total_quantity', 'avg_buy_price']
+        fields = ['id', 'stock_symbol', 'total_quantity', 'avg_buy_price']
 
 
 class WatchlistSerializer(serializers.ModelSerializer):
@@ -30,4 +30,9 @@ class TransactionSerializer(serializers.ModelSerializer):
             "created_at",
         ]
         read_only_fields = ["price", "created_at"]
+
+def validate_quantity(self, value):
+    if value <= 0:
+        raise serializers.ValidationError("Quantity must be greater than 0")
+    return value
 
